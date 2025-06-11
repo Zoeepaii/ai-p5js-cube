@@ -17,7 +17,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   isMobile = windowWidth < 768;
 
-  pixelDensity(isMobile ? 1 : pixelDensity());
+  pixelDensity(window.devicePixelRatio || 1);
 
   numSeeds = isMobile ? 50 : 100;
   numParticles = isMobile ? 300 : 800;
@@ -27,7 +27,7 @@ function setup() {
   noStroke();
 
   infoLayer = createGraphics(windowWidth, windowHeight);
-  infoLayer.pixelDensity(pixelDensity());
+  infoLayer.pixelDensity(window.devicePixelRatio || 1);
   drawInfoText();
 
   for (let i = 0; i < numSeeds; i++) {
@@ -195,9 +195,9 @@ function drawInfoText() {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   isMobile = windowWidth < 768;
-  pixelDensity(isMobile ? 1 : pixelDensity());
+  pixelDensity(window.devicePixelRatio || 1);
   cubeSize = min(windowWidth, windowHeight) * 0.5;
   infoLayer = createGraphics(windowWidth, windowHeight);
-  infoLayer.pixelDensity(pixelDensity());
+  infoLayer.pixelDensity(window.devicePixelRatio || 1);
   drawInfoText();
 }
