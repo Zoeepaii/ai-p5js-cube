@@ -19,8 +19,8 @@ function setup() {
 
   pixelDensity(window.devicePixelRatio || 1);
 
-  numSeeds = isMobile ? 20 : 100;
-  numParticles = isMobile ? 100 : 800;
+  numSeeds = isMobile ? 10 : 100;
+  numParticles = isMobile ? 60 : 800;
 
   cubeSize = min(windowWidth, windowHeight) * 0.5;
   angleMode(RADIANS);
@@ -73,7 +73,7 @@ function draw() {
   }
 
   let dToCenter = dist(inputX, inputY, cx, cy);
-  if (dToCenter < 300) {
+  if (dToCenter < 500) {
     let targetRotX = map(inputY, 0, height, -PI / 2, PI / 2);
     let targetRotY = map(inputX, 0, width, -PI / 2, PI / 2);
     rotationX = lerp(rotationX, targetRotX, 0.05);
@@ -132,12 +132,12 @@ function draw() {
   }
 
   for (let p of particles) {
-    let n = noise(p.pos.x * 0.01, p.pos.y * 0.01, p.pos.z * 0.01, frameCount * 0.01);
+    let n = noise(p.pos.x * 0.01, p.pos.y * 0.01, p.pos.z * 0.01, frameCount * 0.005);
     let flow = createVector(
       sin(n * TWO_PI),
       cos(n * TWO_PI),
       sin(n * TWO_PI * 0.5)
-    ).normalize().mult(1);
+    ).normalize().mult(1.5);
 
     p.vel = flow;
     p.pos.add(p.vel);
