@@ -19,8 +19,8 @@ function setup() {
 
   pixelDensity(window.devicePixelRatio || 1);
 
-  numSeeds = isMobile ? 30 : 100;
-  numParticles = isMobile ? 150 : 800;
+  numSeeds = isMobile ? 20 : 100;
+  numParticles = isMobile ? 100 : 800;
 
   cubeSize = min(windowWidth, windowHeight) * 0.5;
   angleMode(RADIANS);
@@ -39,7 +39,7 @@ function setup() {
       random(-cubeSize / 2, cubeSize / 2)
     );
     let vel = p5.Vector.random3D().mult(0.5);
-    let cubeSizeLocal = random(5, 20);
+    let cubeSizeLocal = isMobile ? random(8, 25) : random(5, 20);
     let gray = random(50, 230);
     cubes.push({ pos, vel, cubeSizeLocal, gray });
   }
@@ -150,8 +150,8 @@ function draw() {
 
     push();
     translate(p.pos.x, p.pos.y, p.pos.z);
-    fill(100, isMobile ? 20 : 50);
-    isMobile ? ellipse(0, 0, 2, 2) : box(1.5);
+    fill(100, isMobile ? 10 : 50);
+    if (isMobile) { ellipse(0, 0, 2, 2); } else { box(1.5); }
     pop();
   }
 
