@@ -1,4 +1,5 @@
 
+// ✅ 手機優化版：改善文字清晰度、減少卡頓
 let cubes = [];
 let particles = [];
 let numSeeds;
@@ -16,6 +17,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   isMobile = windowWidth < 768;
 
+  // ✅ 主畫面為了手機流暢設定較低 pixelDensity，但 infoLayer 另設高畫質
   pixelDensity(isMobile ? 1 : pixelDensity());
 
   numSeeds = isMobile ? 30 : 100;
@@ -26,7 +28,7 @@ function setup() {
   noStroke();
 
   infoLayer = createGraphics(windowWidth, windowHeight);
-  infoLayer.pixelDensity(2);
+  infoLayer.pixelDensity(isMobile ? 2 : pixelDensity()); // ✅ 提高手機上文字畫質
   drawInfoText();
 
   for (let i = 0; i < numSeeds; i++) {
@@ -47,7 +49,7 @@ function setup() {
       random(-cubeSize / 2, cubeSize / 2),
       random(-cubeSize / 2, cubeSize / 2)
     );
-    let vel = p5.Vector.random3D().mult(isMobile ? 2 : 1);
+    let vel = p5.Vector.random3D().mult(2); // ✅ 移動速度加快
     particles.push({ pos, vel });
   }
 }
@@ -132,8 +134,8 @@ function draw() {
 
     push();
     translate(p.pos.x, p.pos.y, p.pos.z);
-    fill(100, 80);
-    sphere(isMobile ? 4 : 2);
+    fill(80, 100);
+    sphere(3); // 明顯些
     pop();
   }
 
@@ -176,6 +178,6 @@ function windowResized() {
   pixelDensity(isMobile ? 1 : pixelDensity());
   cubeSize = min(windowWidth, windowHeight) * 0.5;
   infoLayer = createGraphics(windowWidth, windowHeight);
-  infoLayer.pixelDensity(2);
+  infoLayer.pixelDensity(isMobile ? 2 : pixelDensity());
   drawInfoText();
 }
