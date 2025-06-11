@@ -28,6 +28,7 @@ function setup() {
 
   infoLayer = createGraphics(windowWidth, windowHeight);
   infoLayer.pixelDensity(window.devicePixelRatio || 1);
+  infoLayer.pixelDensity(window.devicePixelRatio || 1);
   drawInfoText();
 
   for (let i = 0; i < numSeeds; i++) {
@@ -198,6 +199,7 @@ function windowResized() {
   pixelDensity(window.devicePixelRatio || 1);
   cubeSize = min(windowWidth, windowHeight) * 0.5;
   infoLayer = createGraphics(windowWidth, windowHeight);
+  infoLayer.pixelDensity(window.devicePixelRatio || 1);
   infoLayer.pixelDensity(window.devicePixelRatio || 1);
   drawInfoText();
 }
