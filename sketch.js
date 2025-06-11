@@ -1,5 +1,4 @@
 
-// ✅ 優化版本：針對手機與電腦分別調整效能與排版，並微調手機排版距離
 let cubes = [];
 let particles = [];
 let numSeeds;
@@ -17,9 +16,9 @@ function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   isMobile = windowWidth < 768;
 
-  pixelDensity(window.devicePixelRatio || 1);
+  pixelDensity(isMobile ? 1 : pixelDensity());
 
-  numSeeds = isMobile ? 10 : 100;
+  numSeeds = isMobile ? 30 : 100;
   numParticles = isMobile ? 60 : 800;
 
   cubeSize = min(windowWidth, windowHeight) * 0.5;
@@ -28,8 +27,6 @@ function setup() {
 
   infoLayer = createGraphics(windowWidth, windowHeight);
   infoLayer.pixelDensity(2);
-  infoLayer.pixelDensity(window.devicePixelRatio || 1);
-  infoLayer.pixelDensity(window.devicePixelRatio || 1);
   drawInfoText();
 
   for (let i = 0; i < numSeeds; i++) {
@@ -39,7 +36,7 @@ function setup() {
       random(-cubeSize / 2, cubeSize / 2)
     );
     let vel = p5.Vector.random3D().mult(0.5);
-    let cubeSizeLocal = isMobile ? random(8, 25) : random(5, 20);
+    let cubeSizeLocal = random(5, 20);
     let gray = random(50, 230);
     cubes.push({ pos, vel, cubeSizeLocal, gray });
   }
@@ -50,7 +47,7 @@ function setup() {
       random(-cubeSize / 2, cubeSize / 2),
       random(-cubeSize / 2, cubeSize / 2)
     );
-    let vel = createVector(0, 0, 0);
+    let vel = p5.Vector.random3D().mult(isMobile ? 2 : 1);
     particles.push({ pos, vel });
   }
 }
@@ -60,7 +57,7 @@ function draw() {
   lights();
 
   let cubeOffsetX = isMobile ? 0 : 200;
-  let cubeOffsetY = isMobile ? 0 : 0; // 手機畫面正中央
+  let cubeOffsetY = isMobile ? 0 : 0;
 
   let cx = width / 2 + cubeOffsetX;
   let cy = height / 2 + cubeOffsetY;
@@ -116,13 +113,6 @@ function draw() {
       }
     }
 
-    let screen = worldToScreen(c.pos, cubeOffsetX, cubeOffsetY);
-    let d = dist(inputX, inputY, screen.x, screen.y);
-    if (d < 20 && dToCenter < 300) {
-      let dir = p5.Vector.sub(c.pos, createVector(0, 0, 0)).normalize();
-      c.vel = dir.mult(random(4, 6));
-    }
-
     push();
     translate(c.pos.x, c.pos.y, c.pos.z);
     fill(c.gray);
@@ -132,14 +122,6 @@ function draw() {
   }
 
   for (let p of particles) {
-    let n = noise(p.pos.x * 0.01, p.pos.y * 0.01, p.pos.z * 0.01, frameCount * 0.005);
-    let flow = createVector(
-      sin(n * TWO_PI),
-      cos(n * TWO_PI),
-      sin(n * TWO_PI * 0.5)
-    ).normalize().mult(1.5);
-
-    p.vel = flow;
     p.pos.add(p.vel);
 
     for (let axis of ['x', 'y', 'z']) {
@@ -150,19 +132,13 @@ function draw() {
 
     push();
     translate(p.pos.x, p.pos.y, p.pos.z);
-    fill(100, isMobile ? 10 : 50);
-    if (isMobile) { ellipse(0, 0, 2, 2); } else { box(1.5); }
+    fill(100, 80);
+    sphere(isMobile ? 4 : 2);
     pop();
   }
 
   resetMatrix();
   image(infoLayer, -width / 2, -height / 2);
-}
-
-function worldToScreen(pos, offsetX, offsetY) {
-  let screenX = width / 2 + offsetX + pos.x * (width / cubeSize);
-  let screenY = height / 2 + offsetY - pos.y * (height / cubeSize);
-  return createVector(screenX, screenY);
 }
 
 function drawInfoText() {
@@ -197,11 +173,9 @@ function drawInfoText() {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   isMobile = windowWidth < 768;
-  pixelDensity(window.devicePixelRatio || 1);
+  pixelDensity(isMobile ? 1 : pixelDensity());
   cubeSize = min(windowWidth, windowHeight) * 0.5;
   infoLayer = createGraphics(windowWidth, windowHeight);
   infoLayer.pixelDensity(2);
-  infoLayer.pixelDensity(window.devicePixelRatio || 1);
-  infoLayer.pixelDensity(window.devicePixelRatio || 1);
   drawInfoText();
 }
